@@ -1,0 +1,26 @@
+﻿@page
+@model IndexModel
+
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <ul>
+        <li>First Name: @HttpContext.Session.GetString("FirstName")</li>
+        <li>Last Name: @HttpContext.Session.GetString("LastName")</li>
+        <li>Credit Card Number: @HttpContext.Session.GetString("CreditCard")</li>
+        <li>Mobile Number: @HttpContext.Session.GetString("PhoneNumber")</li>
+        <li>Billing Address: @HttpContext.Session.GetString("BillingAddress")</li>
+        <li>Email: @HttpContext.Session.GetString("Email")</li>
+        <li>Password: @HttpContext.Session.GetString("Password")</li>
+        <li><img src="@HttpContext.Session.GetString("FilePath")"></li>
+
+        <li>Session: @HttpContext.Session.GetString("AuthToken")</li>
+        <li>Cookie: @Request.Cookies["AuthCookie"]</li>
+    </ul>
+</div>

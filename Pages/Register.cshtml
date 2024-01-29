@@ -1,0 +1,235 @@
+﻿@page
+@model Assignment.Pages.RegisterModel
+@{
+}
+
+@using Microsoft.AspNetCore.Http
+
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script>
+    function onSubmit(token) {
+        document.getElementById("register-form").submit();
+    }
+</script>
+
+<script type="text/javascript">
+
+    function checkUpper(string) {
+        return /[A-Z]/.test(string);
+    }
+
+    var scoreChecker = { pwdlength: false, pwdnumber: false, pwdupper: false, pwdlower: false, pwdspecial: false }
+
+    function validate() {
+        var str = document.getElementById('tb_password').value;
+
+        // check if 8 characters
+        if (str.length < 8) {
+            document.getElementById("lbl_pwdlength").innerHTML = "Password Length must be at least 8 characters";
+            document.getElementById("lbl_pwdlength").style.color = "Red";
+            if (scoreChecker["pwdlength"]) {
+                scoreChecker["pwdlength"] = false;
+                console.log("test")
+            }
+        }
+        else {
+            document.getElementById("lbl_pwdlength").innerHTML = "Password length is good"
+            document.getElementById("lbl_pwdlength").style.color = "Blue";
+            if (!scoreChecker["pwdlength"]) {
+                scoreChecker["pwdlength"] = true;
+            }
+        }
+
+        // check if got number
+        if (str.search(/[0-9]/) == -1) {
+            document.getElementById("lbl_pwdnumber").innerHTML = "Password require at least 1 number";
+            document.getElementById("lbl_pwdnumber").style.color = "Red";
+            if (scoreChecker["pwdnumber"]) {
+                scoreChecker["pwdnumber"] = false;
+            }
+        }
+        else {
+            document.getElementById("lbl_pwdnumber").innerHTML = "Password has a number"
+            document.getElementById("lbl_pwdnumber").style.color = "Blue";
+            if (!scoreChecker["pwdnumber"]) {
+                scoreChecker["pwdnumber"] = true;
+            }
+        }
+
+        // check if got uppercase
+        if (!checkUpper(str)) {
+            document.getElementById("lbl_pwdupper").innerHTML = "Password require at least 1 uppercase character";
+            document.getElementById("lbl_pwdupper").style.color = "Red";
+            if (scoreChecker["pwdupper"]) {
+                scoreChecker["pwdupper"] = false;
+            }
+        }
+        else {
+            document.getElementById("lbl_pwdupper").innerHTML = "Password has uppercase"
+            document.getElementById("lbl_pwdupper").style.color = "Blue";
+            if (!scoreChecker["pwdupper"]) {
+                scoreChecker["pwdupper"] = true;
+            }
+        }
+
+        // require 1 lowercase
+        if (str.search(/[a-z]/) == -1) {
+            document.getElementById("lbl_pwdlower").innerHTML = "Password require at least 1 lowercase character";
+            document.getElementById("lbl_pwdlower").style.color = "Red";
+            if (scoreChecker["pwdlower"]) {
+                scoreChecker["pwdlower"] = false;
+            }
+        }
+        else {
+            document.getElementById("lbl_pwdlower").innerHTML = "Password has lowercase"
+            document.getElementById("lbl_pwdlower").style.color = "Blue";
+            if (!scoreChecker["pwdlower"]) {
+                scoreChecker["pwdlower"] = true;
+            }
+        }
+
+        // require special character
+        if (str.search(/[ `!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/) == -1) {
+            document.getElementById("lbl_pwdspecial").innerHTML = "Password require at least 1 special character";
+            document.getElementById("lbl_pwdspecial").style.color = "Red";
+            if (scoreChecker["pwdspecial"]) {
+                scoreChecker["pwdspecial"] = false;
+            }
+        }
+        else {
+            document.getElementById("lbl_pwdspecial").innerHTML = "Password has special character"
+            document.getElementById("lbl_pwdspecial").style.color = "Blue";
+            if (!scoreChecker["pwdspecial"]) {
+                scoreChecker["pwdspecial"] = true;
+            }
+        }
+
+        strengthScore();
+    }
+
+    function strengthScore() {
+        var score = Object.values(scoreChecker).filter((bool) => bool === true).length;
+        var status = "";
+        switch (score) {
+            case 1:
+                document.getElementById("lbl_pwdstrength").innerHTML = "Very Weak";
+                document.getElementById("lbl_pwdstrength").style.color = "Red";
+                break;
+            case 2:
+                document.getElementById("lbl_pwdstrength").innerHTML = "Weak";
+                document.getElementById("lbl_pwdstrength").style.color = "Red";
+                break;
+            case 3:
+                document.getElementById("lbl_pwdstrength").innerHTML = "Medium";
+                document.getElementById("lbl_pwdstrength").style.color = "Orange";
+                break;
+            case 4:
+                document.getElementById("lbl_pwdstrength").innerHTML = "Strong";
+                document.getElementById("lbl_pwdstrength").style.color = "Orange";
+                break;
+            case 5:
+                document.getElementById("lbl_pwdstrength").innerHTML = "Very Strong";
+                document.getElementById("lbl_pwdstrength").style.color = "Green";
+                break;
+
+            default:
+                break;
+        }
+    }
+
+</script>
+
+<div class="container mt-5">
+
+	<div class="row justify-content-center align-items-center">
+
+		<div class="col-sm-12 col-md-12 col-lg-4">
+			<h1 class="mb-3">Register </h1>
+
+            <form method="post" id="register-form" enctype="multipart/form-data">
+				<div asp-validation-summary="All" class="text-danger"></div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.FirstName">First Name</label>
+					<input type="Text" asp-for="RModel.FirstName" class="form-control" />
+					<span asp-validaton-for="RModel.FirstName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.LastName">Last Name</label>
+					<input type="Text" asp-for="RModel.LastName" class="form-control" />
+					<span asp-validaton-for="RModel.LastName" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.CreditCardNo">Credit Card Number</label>
+                    <input type="Text" asp-for="RModel.CreditCardNo" class="form-control" />
+					<span asp-validaton-for="RModel.CreditCardNo" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.MobileNo">Mobile Number</label>
+					<input type="tel" asp-for="RModel.MobileNo" class="form-control" />
+					<span asp-validaton-for="RModel.MobileNo" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.BillingAddress">Billing Address</label>
+					<input type="Text" asp-for="RModel.BillingAddress" class="form-control" />
+					<span asp-validaton-for="RModel.BillingAddress" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.ShippingAddress">Shipping Address</label>
+					<input type="Text" asp-for="RModel.ShippingAddress" class="form-control" />
+					<span asp-validaton-for="RModel.ShippingAddress" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.EmailAddress">Email Address</label>
+					<input type="Text" asp-for="RModel.EmailAddress" class="form-control" />
+					<span asp-validaton-for="RModel.EmailAddress" class="text-danger"></span>
+				</div>
+
+                <div class="mb-3">
+                    <label class="form-label" asp-for="RModel.Image">Image</label>
+                    <input type="file" asp-for="RModel.Image" class="form-control" />
+                    <span asp-validaton-for="RModel.Image" class="text-danger"></span>
+                </div>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.Password">Password</label>
+                    <input type="Text" asp-for="RModel.Password" class="form-control" ID="tb_password" onkeyup="javascript:validate()" />
+					<span asp-validaton-for="RModel.Password" class="text-danger"></span>
+				</div>
+
+                <asp:Label ID="lbl_pwdlength" runat="server" Text="length"></asp:Label>
+                <br />
+                <asp:Label ID="lbl_pwdnumber" runat="server" Text="number"></asp:Label>
+                <br />
+                <asp:Label ID="lbl_pwdupper" runat="server" Text="upper"></asp:Label>
+                <br />
+                <asp:Label ID="lbl_pwdlower" runat="server" Text="lower"></asp:Label>
+                <br />
+                <asp:Label ID="lbl_pwdspecial" runat="server" Text="special"></asp:Label>
+                <br />
+                <asp:Label ID="lbl_pwdstrength" runat="server" Text="special"></asp:Label>
+
+				<div class="mb-3">
+					<label class="form-label" asp-for="RModel.ConfirmPassword">Confirm Password</label>
+					<input type="Text" asp-for="RModel.ConfirmPassword" class="form-control" />
+					<span asp-validaton-for="RModel.ConfirmPassword" class="text-danger"></span>
+				</div>
+
+				<div class="mb-3">
+                    <button type="submit" class="btn btn-primary g-recaptcha"
+                            data-sitekey="6LfyXlgpAAAAAFUKlF6FNFvjCWHEbPdIdjrcRXIS"
+                            data-callback='onSubmit'>
+                        Register
+                    </button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
